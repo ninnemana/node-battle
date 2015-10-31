@@ -1,41 +1,36 @@
-// Angular 2
-import {Component, View, CORE_DIRECTIVES} from 'angular2/angular2';
-import {FORM_DIRECTIVES, ControlGroup, FormBuilder} from 'angular2/angular2';
-import {Validators} from 'angular2/angular2';
+import {Component, Validators, CORE_DIRECTIVES} from 'angular2/angular2';
+import {FORM_DIRECTIVES, ControlGroup, Control} from 'angular2/angular2';
 
-// App
-import {TodoService} from '../../services/TodoService';
+import {TodoService, Todo} from '../../services/todo_service';
+import {Autofocus} from '../../directives/Autofocus';
+import {CustomOrderByPipe} from '../../pipes/CustomOrderByPipe';
 
-// Simple component
 @Component({
-  viewBindings: [FormBuilder, TodoService],
-  selector: 'todo'
+  selector: 'todo',
+  templateUrl: './components/todo/todo.html',
+  directives: [CORE_DIRECTIVES, FORM_DIRECTIVES, Autofocus],
+  pipes: [CustomOrderByPipe]
 })
-@View({
-  directives: [CORE_DIRECTIVES, FORM_DIRECTIVES],
-  templateUrl: '/client/components/todo/todo.html'
-})
-export class Todo {
+export class TodoCmp {
 
   todoForm: ControlGroup;
 
-  constructor(private todoService: TodoService, fb: FormBuilder) {
-    this.todoForm = fb.group({
-      title: ['', Validators.required]
+  constructor(private todoService: TodoService) {
+    this.todoForm = new ControlGroup({
+      title: new Control('', Validators.required)
     });
   }
 
-  addOne() {
-    const todo = this.todoForm.value;
+  addOne(todo: Todo) {
     this.todoService.addOne(todo);
-    this.todoForm.controls['title'].updateValue('');
+    (<Control>this.todoForm.controls['title']).updateValue('');
   }
 
-  removeOne(todo) {
+  removeOne(todo: Todo) {
     this.todoService.removeOne(todo.id);
   }
 
-  find() {
+  find(): Todo[] {
     return this.todoService.find();
   }
 }

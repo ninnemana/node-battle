@@ -1,30 +1,27 @@
 {
-    "version": "1.5.0",
+    "version": "1.6.0",
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
         "declaration": false,
         "noImplicitAny": false,
         "removeComments": true,
-        "noLib": true,
+        "noLib": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "sourceMap": true,
-        "outDir": "dist"
+        "experimentalAsyncFunctions": false,
+        "sourceMap": true
     },
     "filesGlob": [
-        "typings/tsd.d.ts",
-        "client/**/*.ts"
+        "./client/**/*.ts",
+        "./server/**/*.ts",
+        "./gulpfile.ts",
+        "./tools/**/*.ts",
+        "./tsd_typings/**/*.d.ts"
     ],
-    "files": [
-        "typings/tsd.d.ts",
-        "client/bootstrap.ts",
-        "client/components/app.ts",
-        "client/components/dashboard/dashboard.ts",
-        "client/components/home/home.ts",
-        "client/components/todo/todo.ts",
-        "client/directives/Autofocus.ts",
-        "client/directives/XLarge.ts",
-        "client/services/TodoService.ts"
+    "compileOnSave": false,
+    "exclude": [
+        "./node_modules/**",
+        "./tools/typings/tsd/**"
     ]
 }

@@ -1,43 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <title>Angular2 Minimalist Starter</title>
   <meta charset="utf-8">
-  <base href="/">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Angular2 Minimalist Starter">
+  <title>My Angular 2 App</title>
+  <base href="<%= APP_BASE %>">
+  <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- inject:css -->
+  <!-- endinject -->
 </head>
-
 <body>
 
-  <app>
-    Loading...
-  </app>
+  <app>Loading...</app>
 
-  <!-- ES6 -->
-  <script src="/lib/traceur-runtime.js"></script>
-  <script src="/lib/system.js"></script>
-  <!-- Angular Deps -->
-  <script src="/lib/Reflect.js"></script>
-  <script src="/lib/zone.js"></script>
-  <script src="/lib/long-stack-trace-zone.js"></script>
-  <!-- App -->
+  <!-- inject:js -->
+  <!-- endinject -->
+
   <script>
-    System.defaultJSExtensions = true;
-    System.config({
-      paths: {
-        'angular2/*': '/lib/angular2/*'
-      },
-      map: {
-        rx: '/lib/rx.js'
-      }
-    });
-    System.import('/client/bootstrap').catch(
-      console.error.bind(console)
-    );
+    System.import('bootstrap')
+      .catch(function (e) {
+        console.error(e,
+          'Report this error at https://github.com/mgechev/angular2-seed/issues');
+      });
   </script>
-</body>
 
+</body>
 </html>

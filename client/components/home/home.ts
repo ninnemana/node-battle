@@ -1,17 +1,10 @@
-/// <reference path="../../../typings/tsd.d.ts" />
-
-// Angular 2
-import {Component, View} from 'angular2/angular2';
+import {Component} from 'angular2/angular2';
+import {XLarge} from '../../directives/XLarge';
 
 @Component({
-  selector: 'home'
+  directives: [XLarge],
+  selector: 'home',
+  templateUrl: './components/home/home.html',
+  styleUrls: ['./components/home/home.css']
 })
-@View({
-  styleUrls: ['/client/components/home/home.css'],
-  templateUrl: '/client/components/home/home.html'
-})
-export class Home {
-  constructor() {
-
-  }
-}
+export class HomeCmp {}
