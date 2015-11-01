@@ -27,4 +27,5 @@ node_modules
 
 dist
 test
+.tmp
 tools/typings/tsd
