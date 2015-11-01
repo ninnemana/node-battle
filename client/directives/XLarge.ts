@@ -2,7 +2,6 @@
 import {Directive, ElementRef} from 'angular2/angular2';
 
 // Simple example directive that should be in `/directives` folder
-// Todo: refactor
 @Directive({
   selector: '[x-large]' // using [ ] means selecting attributes
 })

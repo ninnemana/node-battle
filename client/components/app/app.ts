@@ -3,7 +3,6 @@ import {
   RouteConfig,
   ROUTER_DIRECTIVES
 } from 'angular2/router';
-// import {HTTP_BINDINGS} from 'http/http';
 
 import {HomeCmp} from '../home/home';
 import {TodoCmp} from '../todo/todo';

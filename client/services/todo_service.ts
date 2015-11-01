@@ -24,8 +24,6 @@ export class TodoService {
 
   _todos: Todo[];
 
-  names = ['Dijkstra', 'Knuth', 'Turing', 'Hopper'];
-
   constructor() {
     this._todos = data;
   }
