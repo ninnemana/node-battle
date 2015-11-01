@@ -8,6 +8,14 @@
 * Custom Directives
 * Forms
 
+> Development utilities:
+* TypeScript (almost) everywhere
+* Live-reload when the source-code changes
+* Karma setup
+* Sample tests
+* Static analysis linter for TypeScript
+* Very basic express setup (for backend)
+
 ## Goal
 Maintain an up-to-date and minimalist project using the very latest version of Angular2, while exposing most of the Angular2's features. Thus anyone can use it as an extremely minimal base to get up and running with Angular2 and TypeScript (using Gulp for assisting with boilerplate).
 
@@ -19,17 +27,16 @@ Maintain an up-to-date and minimalist project using the very latest version of A
 # 2. Run command: npm install
 # 3. Run command: npm start
 ```
-#### Tested on
-* Node.js 4.2.1
+**Tested on:** Node.js 4.2.1
 
-#### Use a TypeScript-aware editor for view or edit the code.
+##### Use a TypeScript-aware editor for view or edit the code.
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [Atom](https://atom.io/) with [TypeScript plugin](https://atom.io/packages/atom-typescript)
 * [Webstorm](https://www.jetbrains.com/webstorm/download/)
 * [Sublime Text](http://www.sublimetext.com) with [Typescript plugin](https://github.com/Microsoft/Typescript-Sublime-plugin#installation)
 
 ## Credits
-The following projects have served as inspiration and help:
+The following projects have served a lot as inspiration and help:
 - [angular2-seed](https://github.com/mgechev/angular2-seed)
 - [ng2-play](https://github.com/pkozlowski-opensource/ng2-play)
 - [angular2-webpack-starter](https://github.com/angular-class/angular2-webpack-starter)
