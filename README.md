@@ -29,7 +29,7 @@ Maintain an up-to-date and minimalist project using the very latest version of A
 ```
 **Tested on:** Node.js 4.2.1
 
-##### Use a TypeScript-aware editor for view or edit the code.
+##### Use a TypeScript-aware editor to view/edit the code.
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [Atom](https://atom.io/) with [TypeScript plugin](https://atom.io/packages/atom-typescript)
 * [Webstorm](https://www.jetbrains.com/webstorm/download/)
