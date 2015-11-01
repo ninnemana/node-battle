@@ -16,13 +16,14 @@ System.config({
   }
 });
 
+// Import all the specs, execute their `main()` method and kick off Karma (Jasmine).
 System.import('angular2/src/core/dom/browser_adapter').then(function(browser_adapter) {
   browser_adapter.BrowserDomAdapter.makeCurrent();
 }).then(function() {
   return Promise.all(
     Object.keys(window.__karma__.files) // All files served by Karma.
     .filter(onlySpecFiles)
-    .map(file2moduleName)
+    .map(file2moduleName)        // Normalize paths to module names.
     .map(function(path) {
       return System.import(path).then(function(module) {
         if (module.hasOwnProperty('main')) {
@@ -36,13 +37,12 @@ System.import('angular2/src/core/dom/browser_adapter').then(function(browser_ada
 .then(function() {
   __karma__.start();
 }, function(error) {
-  console.error(error.stack || error);
-  __karma__.start();
+  __karma__.error(error.stack || error);
 });
 
 
 function onlySpecFiles(path) {
-  return /[\.|_]spec\.js$/.test(path);
+  return /_spec\.js$/.test(path);
 }
 
 // Normalize paths to module names.

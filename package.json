@@ -4,12 +4,12 @@
   "description": "A Minimalist Starter kit for Angular2",
   "repository": {
     "type": "git",
-    "url" : "https://github.com/rogerpadilla/angular2-minimalist-starter.git"
+    "url": "https://github.com/rogerpadilla/angular2-minimalist-starter.git"
   },
   "bugs": {
     "url": "https://github.com/rogerpadilla/angular2-minimalist-starter/issues"
   },
-  "scripts": {        
+  "scripts": {
     "lint": "gulp tslint",
     "postinstall": "tsd reinstall --clean && tsd link && tsd rebundle && gulp postinstall",
     "start": "gulp serve --env dev",
@@ -49,13 +49,13 @@
     "karma-jasmine": "^0.3.6",
     "karma-mocha-reporter": "^1.1.1",
     "karma-phantomjs2-launcher": "^0.3.2",
-    "mini-lr": "^0.1.8",
     "open": "^0.0.5",
     "run-sequence": "^1.1.4",
     "serve-static": "^1.10.0",
     "slash": "^1.0.0",
     "stream-series": "^0.1.1",
     "systemjs-builder": "^0.14.10",
+    "tiny-lr": "^0.2.1",
     "traceur": "^0.0.92",
     "ts-node": "^0.4.0",
     "tsd": "^0.6.5",
