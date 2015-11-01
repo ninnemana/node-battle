@@ -21,7 +21,7 @@ export class CustomOrderByPipe implements PipeTransform {
     };
   }
 
-  dynamicSortMultiple(...props): Function {
+  dynamicSortMultiple(...props: string[]): Function {
 
     return (obj1: Object, obj2: Object) => {
 

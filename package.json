@@ -9,17 +9,14 @@
   "bugs": {
     "url": "https://github.com/rogerpadilla/angular2-minimalist-starter/issues"
   },
-  "scripts": {
-    "build.dev": "gulp build.dev",
-    "watch.dev": "gulp watch.dev",
-    "build.test": "gulp build.test",
-    "watch.test": "gulp watch.test",
-    "karma.start": "karma start",
+  "scripts": {        
     "lint": "gulp tslint",
     "postinstall": "tsd reinstall --clean && tsd link && tsd rebundle && gulp postinstall",
     "start": "gulp serve --env dev",
     "tasks.list": "gulp --tasks-simple",
-    "test": "gulp test"
+    "karma.start": "karma start",
+    "test": "gulp test",
+    "test.watch": "gulp test.watch"
   },
   "author": "Roger Padilla <rogerpadilla>",
   "license": "MIT",

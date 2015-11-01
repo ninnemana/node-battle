@@ -1,4 +1,3 @@
-import {join} from 'path';
 import * as gulp from 'gulp';
 import * as del from 'del';
 import * as runSequence from 'run-sequence';
@@ -14,8 +13,8 @@ import * as shell from 'gulp-shell';
 import {Server} from 'karma';
 
 import {ENV, PATH} from './tools/config';
+
 import {
-registerInjectableAssetsRef,
 compileTs,
 injectableAssetsRef,
 transformPath,
@@ -26,124 +25,143 @@ tsProject
 import {serveSPA, notifyLiveReload} from './server/bootstrap';
 
 // --------------
-// Configuration.
-registerInjectableAssetsRef(PATH.src.jslib_inject, PATH.dest.dev.lib);
-registerInjectableAssetsRef(PATH.src.csslib, PATH.dest.dev.css);
-
-
-// --------------
 // Client.
-gulp.task('build.csslib.dev', () => {
-  return gulp.src(PATH.src.csslib)
-    .pipe(gulp.dest(join(PATH.dest.dev.css)));
-});
+gulp.task('csslib.build.dev', () =>
+  gulp.src(PATH.src.csslib)
+    .pipe(gulp.dest(PATH.dest.dev.css))
+);
 
-gulp.task('build.fonts', () => {
-  return gulp.src(PATH.src.fonts)
-    .pipe(gulp.dest(join(PATH.dest.dev.fonts)));
-});
+gulp.task('font.build.dev', () =>
+  gulp.src(PATH.src.font)
+    .pipe(gulp.dest(PATH.dest.dev.font))
+);
 
-gulp.task('build.sass.dev', () => {
-  return gulp.src(join(PATH.src.all, '**', '*.scss'))
+gulp.task('sass.build.dev', () =>
+  gulp.src(`${PATH.src.base}/**/*.scss`)
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest(PATH.src.all));
-});
+    .pipe(gulp.dest(PATH.src.base))
+);
 
-gulp.task('build.jslib.dev', () => {
+gulp.task('sass.build.watch', () =>
+  gulp.watch(`${PATH.src.base}/**/*.scss`, (evt) =>
+    runSequence('sass.build.dev', () => notifyLiveReload([evt.path]))
+  )
+);
+
+gulp.task('jslib.build.dev', () => {
   const src = PATH.src.jslib_inject.concat(PATH.src.jslib_copy_only);
   return gulp.src(src)
     .pipe(gulp.dest(PATH.dest.dev.lib));
 });
 
-gulp.task('build.js.dev', () => {
-  return compileTs();
+gulp.task('js.client.build.dev', () => {
+  const filesToCompile = PATH.src.ts;
+  return compileTs(filesToCompile);
 });
 
-gulp.task('build.tpls.dev', () => {
-  return gulp.src(PATH.src.tpls)
-    .pipe(gulp.dest(join(PATH.dest.dev.components)));
-});
+gulp.task('tpl.build.dev', () =>
+  gulp.src(PATH.src.tpl)
+    .pipe(gulp.dest(PATH.dest.dev.component))
+);
 
-gulp.task('build.index.dev', () => {
+gulp.task('tpl.build.watch', () =>
+  gulp.watch(PATH.src.tpl, (evt) =>
+    runSequence('tpl.build.dev', () => notifyLiveReload([evt.path]))
+  )
+);
 
-  const injectables = injectableAssetsRef();
-  const target = gulp.src(injectables, { read: false });
+gulp.task('index.build.dev', () => {
 
-  return gulp.src(join(PATH.src.all, 'index.html'))
-    .pipe(inject(target, {
+  const INDEX_INJECTABLES = injectableAssetsRef();
+  const INDEX_INJECTABLES_TARGET = gulp.src(INDEX_INJECTABLES, { read: false });
+
+  return gulp.src(PATH.src.index)
+    .pipe(inject(INDEX_INJECTABLES_TARGET, {
       transform: transformPath('dev')
     }))
     .pipe(template(templateLocals))
-    .pipe(gulp.dest(PATH.dest.dev.all));
+    .pipe(gulp.dest(PATH.dest.dev.base));
 });
 
-gulp.task('build.dev', (done) =>
-  runSequence('clean.dist',
+gulp.task('index.build.watch', () =>
+  gulp.watch(PATH.src.index, (evt) =>
+    runSequence('index.build.dev', () => notifyLiveReload([evt.path]))
+  )
+);
+
+gulp.task('build.dev', (done: gulp.TaskCallback) =>
+  runSequence('dist.clean',
     [
       'tslint',
-      'build.jslib.dev',
-      'build.sass.dev',
-      'build.js.dev',
-      'build.tpls.dev',
-      'build.csslib.dev',
-      'build.fonts'
+      'jslib.build.dev',
+      'sass.build.dev',
+      'js.client.build.dev',
+      'tpl.build.dev',
+      'csslib.build.dev',
+      'font.build.dev'
     ],
-    'build.index.dev',
+    'index.build.dev',
     done)
 );
 
-gulp.task('watch.dev', ['build.dev'], () => {
-  return gulp.watch(join(PATH.src.all, '**/*'), () => gulp.start('build.dev'));
-});
+gulp.task('watch.dev', ['build.dev'], () =>
+  gulp.watch(`${PATH.src.base}/**/*`, () => gulp.start('build.dev'))
+);
 
 // --------------
 // Serve.
-gulp.task('server.start', (done) => {
+gulp.task('js.client.watch', () =>
+  gulp.watch(PATH.src.ts, (evt) => {
+    const filesToCompile = PATH.src.ts;
+    compileTs(filesToCompile);
+    notifyLiveReload([evt.path])
+  })
+);
+
+gulp.task('server.start', (done: gulp.TaskCallback) => {
   serveSPA();
   done();
 });
 
-gulp.task('watch.serve', () => {
-  return gulp.watch(PATH.src.ts, evt => {
-    const changedFiles: string[] = [evt.path];
-    const resp = compileTs(changedFiles);
-    notifyLiveReload(changedFiles)
-    return resp;
-  });
-});
+gulp.task('serve.watch', [
+  'js.client.watch',
+  'index.build.watch',
+  'tpl.build.watch',
+  'sass.build.dev'
+]);
 
-gulp.task('serve', (done) =>
-  runSequence(`build.${ENV}`, 'server.start', 'watch.serve', done)
+gulp.task('serve', (done: gulp.TaskCallback) =>
+  runSequence(`build.${ENV}`, 'server.start', 'serve.watch', done)
 );
 
 // --------------
 // Test.
-gulp.task('build.test', () => {
+gulp.task('test.build', () => {
 
-  const src = [join(PATH.src.all, '**/*.ts'), '!' + join(PATH.src.all, 'bootstrap.ts')];
+  const src = [`${PATH.src.base}/**/*.ts`, `!${PATH.src.base}/bootstrap.ts`];
 
   const result = gulp.src(src)
     .pipe(plumber())
-    .pipe(inlineNg2Template({ base: PATH.src.all }))
+    .pipe(inlineNg2Template({ base: PATH.src.base }))
     .pipe(typescript(tsProject));
 
   return result.js
     .pipe(gulp.dest(PATH.dest.test));
 });
 
-gulp.task('watch.test', ['build.test'], () => {
-  return gulp.watch(PATH.src.ts, () => gulp.start('build.test'));
-});
+gulp.task('test.watch', ['test.build'], () =>
+  gulp.watch(PATH.src.ts, () => gulp.start('test.build'))
+);
 
-gulp.task('karma.start', (done) => {
+gulp.task('karma.start', (done: gulp.TaskCallback) =>
   new Server({
-    configFile: join(process.cwd(), 'karma.conf.js'),
+    configFile: `${PATH.cwd}/karma.conf.js`,
     singleRun: true
-  }, done).start();
-});
+  }, done).start()
+);
 
-gulp.task('test', (done) =>
-  runSequence('clean.test', 'build.test', 'karma.start', done)
+gulp.task('test', (done: gulp.TaskCallback) =>
+  runSequence('test.clean', 'test.build', 'karma.start', done)
 );
 
 // --------------
@@ -151,13 +169,13 @@ gulp.task('test', (done) =>
 gulp.task('tslint', () => {
 
   const src = [
-    join(PATH.src.all, '**/*.ts'),
-    '!' + join(PATH.src.all, '**/*.d.ts'),
-    join(PATH.tools, '**/*.ts'),
-    '!' + join(PATH.tools, '**/*.d.ts')
+    `${PATH.src.base}/**/*.ts`,
+    `!${PATH.src.base}/**/*.d.ts`,
+    `${PATH.tools}/**/*.ts`,
+    `!${PATH.tools}/**/*.d.ts`
   ];
 
-  return gulp.src(src)  
+  return gulp.src(src)
     .pipe(tslint())
     .pipe(tslint.report(tslintStylish, {
       emitError: false,
@@ -170,30 +188,30 @@ gulp.task('tslint', () => {
 
 // --------------
 // Clean.
-gulp.task('clean', ['clean.dist', 'clean.test', 'clean.tmp']);
+gulp.task('clean', ['dist.clean', 'test.clean', 'tmp.clean']);
 
-gulp.task('clean.dist', () => {
-  return del(PATH.dest.all);
-});
+gulp.task('dist.clean', () =>
+  del(PATH.dest.base)
+);
 
-gulp.task('clean.test', () => {
-  return del(PATH.dest.test);
-});
+gulp.task('test.clean', () =>
+  del(PATH.dest.test)
+);
 
-gulp.task('clean.tmp', () => {
-  return del(join(PATH.dest.tmp));
-});
+gulp.task('tmp.clean', () =>
+  del(PATH.dest.tmp)
+);
 
 // --------------
 // Postinstall.
-gulp.task('npm', () => {
-  return shell.task(['npm prune']);
-});
+gulp.task('npm', () =>
+  shell.task(['npm prune'])
+);
 
-gulp.task('tsd', () => {
-  return shell.task(['tsd reinstall --clean', 'tsd link', 'tsd rebundle']);
-});
+gulp.task('tsd', () =>
+  shell.task(['tsd reinstall --clean', 'tsd link', 'tsd rebundle'])
+);
 
-gulp.task('postinstall', (done) => {
+gulp.task('postinstall', (done: gulp.TaskCallback) =>
   runSequence('clean', 'npm', done)
-});
+);

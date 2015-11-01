@@ -6,30 +6,31 @@ import * as sourcemaps from 'gulp-sourcemaps';
 import * as plumber from 'gulp-plumber';
 import * as inject from 'gulp-inject';
 import * as template from 'gulp-template';
-import * as inlineNg2Template from 'gulp-inline-ng2-template';
 import * as typescript from 'gulp-typescript';
 
 import {PATH, APP_BASE, VERSION} from './config';
 
 
-let injectables: string[] = [];
+export function injectableAssetsRef(): string[] {
 
-export function injectableAssetsRef() {
+  const aux1 = obtainInjectableAssetsRef(PATH.src.jslib_inject, PATH.dest.dev.lib);
+  const aux2 = obtainInjectableAssetsRef(PATH.src.csslib, PATH.dest.dev.css);
+
+  const injectables = aux1.concat(aux2);
+
   return injectables;
 }
 
-export function registerInjectableAssetsRef(paths: string[], target: string = '') {
-  injectables = injectables.concat(
-    paths
-      .filter(path => !/(\.map)$/.test(path))
-      .map(path => join(target, slash(path).split('/').pop()))
-  );
+function obtainInjectableAssetsRef(paths: string[], target = ''): string[] {
+  return paths
+    .filter(path => !/(\.map)$/.test(path))
+    .map(path => join(target, slash(path).split('/').pop()));
 }
 
-export function transformPath(env) {
+export function transformPath(env: string) {
   const v = '?v=' + VERSION;
-  return function (filepath) {
-    const filename = filepath.replace('/' + PATH.dest[env].all, '') + v;
+  return function(filepath: string) {
+    const filename = filepath.replace('/' + PATH.dest[env].base, '') + v;
     arguments[0] = join(APP_BASE, filename);
     return inject.transform.apply(inject.transform, arguments);
   };
@@ -43,21 +44,16 @@ export const templateLocals = {
 
 export const tsProject = ts.createProject('tsconfig.json');
 
-export function compileTs(files?: string[]) {
+export function compileTs(filesToCompile: string[]) {
 
-  // TODO id does not work if we only compile the changed file,
-  // check why and correct it later (compilation time would be lower)
-  files = PATH.src.ts;
-
-  const result = gulp.src(files)
+  const result = gulp.src(filesToCompile)
     .pipe(plumber())
     .pipe(sourcemaps.init())
-    .pipe(inlineNg2Template({ base: PATH.src.all }))    
     .pipe(typescript(tsProject));
 
   return result.js
     .pipe(sourcemaps.write())
     .pipe(template(templateLocals))
-    .pipe(gulp.dest(PATH.dest.dev.all));
+    .pipe(gulp.dest(PATH.dest.dev.base));
 }
 

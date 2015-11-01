@@ -1,49 +1,48 @@
 import {argv} from 'yargs';
-import {join} from 'path';
 import * as fs from 'fs';
 
 const resolve = require.resolve;
 
 const CWD = process.cwd();
-const pkg = JSON.parse(fs.readFileSync(CWD + '/package.json', 'utf8'));
+const pkg = JSON.parse(fs.readFileSync(`${CWD}/package.json`, 'utf8'));
 
 // --------------
 // Configuration.
-export const ENV = argv['env'] || 'dev';
-export const DEBUG = argv['debug'] || false;
-export const PORT = argv['port'] || 5555;
-export const LIVE_RELOAD_PORT = argv['reload-port'] || 4002;
-export const APP_BASE = argv['base'] || '/';
+export const ENV: string = argv['env'] || 'dev';
+export const DEBUG: boolean = argv['debug'] || false;
+export const PORT: number = argv['port'] || 5555;
+export const LIVE_RELOAD_PORT: number = argv['reload-port'] || 4002;
+export const APP_BASE: string = argv['base'] || '/';
 
-const CLIENT_SRC = 'client';
-const CLIENT_DEST = 'dist';
+const CLIENT_SRC_BASE = 'client';
+const CLIENT_DEST_BASE = 'dist';
 export const ANGULAR_BUNDLES = './node_modules/angular2/bundles';
-export const VERSION = pkg.version;
+export const VERSION: string = pkg.version;
 
 
 export const PATH = {
   cwd: CWD,
   tools: 'tools',
   dest: {
-    all: CLIENT_DEST,
+    base: CLIENT_DEST_BASE,
     dev: {
-      all: `${CLIENT_DEST}/${ENV}`,
-      lib: `${CLIENT_DEST}/${ENV}/lib`,
-      css: `${CLIENT_DEST}/${ENV}/css`,
-      fonts: `${CLIENT_DEST}/${ENV}/fonts`,
-      components: `${CLIENT_DEST}/${ENV}/components`
+      base: `${CLIENT_DEST_BASE}/${ENV}`,
+      lib: `${CLIENT_DEST_BASE}/${ENV}/lib`,
+      css: `${CLIENT_DEST_BASE}/${ENV}/css`,
+      font: `${CLIENT_DEST_BASE}/${ENV}/fonts`,
+      component: `${CLIENT_DEST_BASE}/${ENV}/components`
     },
     test: 'test',
     tmp: '.tmp'
   },
   src: {
-    all: CLIENT_SRC,
+    base: CLIENT_SRC_BASE,
     jslib_inject: [
       // Order is quite important here for the HTML tag injection.
       resolve('es6-shim/es6-shim.min.js'),
       resolve('es6-shim/es6-shim.map'),
       resolve('systemjs/dist/system.src.js'),
-      `${CLIENT_SRC}/system.config.js`,
+      `${CLIENT_SRC_BASE}/system.config.js`,
       `${ANGULAR_BUNDLES}/angular2.dev.js`,
       `${ANGULAR_BUNDLES}/router.dev.js`,
       `${ANGULAR_BUNDLES}/http.dev.js`
@@ -56,17 +55,18 @@ export const PATH = {
       resolve('bootstrap/dist/css/bootstrap.min.css'),
       resolve('bootstrap/dist/css/bootstrap.css.map')
     ],
-    fonts: [
+    font: [
       resolve('bootstrap/dist/fonts/glyphicons-halflings-regular.eot'),
       resolve('bootstrap/dist/fonts/glyphicons-halflings-regular.svg'),
       resolve('bootstrap/dist/fonts/glyphicons-halflings-regular.ttf'),
       resolve('bootstrap/dist/fonts/glyphicons-halflings-regular.woff'),
       resolve('bootstrap/dist/fonts/glyphicons-halflings-regular.woff2')
     ],
-    tpls: [
-      `${CLIENT_SRC}/components/**/*.html`,
+    index: `${CLIENT_SRC_BASE}/index.html`,
+    tpl: [
+      `${CLIENT_SRC_BASE}/components/**/*.html`,
     ],
-    ts: [join(CLIENT_SRC, '**/*.ts'), '!' + join(CLIENT_SRC, '**/*_spec.ts')]
+    ts: [`${CLIENT_SRC_BASE}/**/*.ts`, `!${CLIENT_SRC_BASE}/**/*_spec.ts`]
   }
 };
 

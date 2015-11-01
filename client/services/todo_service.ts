@@ -30,13 +30,6 @@ export class TodoService {
     this._todos = data;
   }
 
-  get(): string[] {
-    return this.names;
-  }
-  add(value: string): void {
-    this.names.push(value);
-  }
-
   addOne(todo: Todo) {
     this._todos.push({
       id: ++counter,
@@ -46,7 +39,7 @@ export class TodoService {
     });
   }
 
-  removeOne(id) {
+  removeOne(id: number) {
     this._todos = this._todos.filter(el => el.id !== id);
   }
 

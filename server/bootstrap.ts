@@ -8,20 +8,22 @@ import {APP_BASE, LIVE_RELOAD_PORT, PATH, PORT, ENV} from '../tools/config';
 
 const minilr = minilrFn();
 
+const INDEX_DEST_PATH = resolve(PATH.cwd, PATH.dest[ENV].base, 'index.html');
+
 
 export function serveSPA() {
-  
+
   const server = express();
   minilr.listen(LIVE_RELOAD_PORT);
 
   server.use(
     APP_BASE,
     connectLivereload({ port: LIVE_RELOAD_PORT }),
-    serveStatic(resolve(process.cwd(), PATH.dest[ENV].all))
+    serveStatic(resolve(PATH.cwd, PATH.dest[ENV].base))
   );
 
   server.all(APP_BASE + '*', (req, res) =>
-    res.sendFile(resolve(process.cwd(), PATH.dest[ENV].all, 'index.html'))
+    res.sendFile(INDEX_DEST_PATH)
   );
 
   server.listen(PORT, () =>
