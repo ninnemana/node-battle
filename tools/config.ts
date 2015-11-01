@@ -17,7 +17,7 @@ export const APP_BASE: string = argv['base'] || '/';
 const CLIENT_SRC_BASE = 'client';
 const CLIENT_DEST_BASE = 'dist';
 export const ANGULAR_BUNDLES = './node_modules/angular2/bundles';
-export const VERSION: string = pkg.version;
+export const APP_VERSION: string = pkg.version;
 
 
 export const PATH = {

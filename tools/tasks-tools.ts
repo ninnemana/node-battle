@@ -8,7 +8,7 @@ import * as inject from 'gulp-inject';
 import * as template from 'gulp-template';
 import * as typescript from 'gulp-typescript';
 
-import {PATH, APP_BASE, VERSION} from './config';
+import {PATH, APP_BASE, APP_VERSION} from './config';
 
 
 export function injectableAssetsRef(): string[] {
@@ -28,7 +28,7 @@ function obtainInjectableAssetsRef(paths: string[], target = ''): string[] {
 }
 
 export function transformPath(env: string) {
-  const v = '?v=' + VERSION;
+  const v = '?v=' + APP_VERSION;
   return function(filepath: string) {
     const filename = filepath.replace('/' + PATH.dest[env].base, '') + v;
     arguments[0] = join(APP_BASE, filename);
@@ -38,7 +38,7 @@ export function transformPath(env: string) {
 
 // TODO: Add an interface to register more template locals.
 export const templateLocals = {
-  VERSION,
+  APP_VERSION,
   APP_BASE
 };
 
