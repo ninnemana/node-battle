@@ -23,7 +23,7 @@ System.import('angular2/src/core/dom/browser_adapter').then(function(browser_ada
   return Promise.all(
     Object.keys(window.__karma__.files) // All files served by Karma.
     .filter(onlySpecFiles)
-    .map(file2moduleName)        // Normalize paths to module names.
+    .map(window.file2moduleName)        // Normalize paths to module names.
     .map(function(path) {
       return System.import(path).then(function(module) {
         if (module.hasOwnProperty('main')) {
@@ -43,11 +43,4 @@ System.import('angular2/src/core/dom/browser_adapter').then(function(browser_ada
 
 function onlySpecFiles(path) {
   return /_spec\.js$/.test(path);
-}
-
-// Normalize paths to module names.
-function file2moduleName(filePath) {
-  return filePath.replace(/\\/g, '/')
-    .replace(/^\/base\//, '')
-    .replace(/\.js/, '');
 }

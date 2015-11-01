@@ -56,7 +56,6 @@
     "stream-series": "^0.1.1",
     "systemjs-builder": "^0.14.10",
     "tiny-lr": "^0.2.1",
-    "traceur": "^0.0.92",
     "ts-node": "^0.4.0",
     "tsd": "^0.6.5",
     "typescript": "^1.6.2",

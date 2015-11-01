@@ -15,19 +15,21 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'node_modules/es6-shim/es6-shim.js',
+      
+      // zone-microtask must be included first as it contains a Promise monkey patch
       'node_modules/zone.js/dist/zone-microtask.js',
       'node_modules/zone.js/dist/long-stack-trace-zone.js',
       'node_modules/zone.js/dist/jasmine-patch.js',
-      'node_modules/es6-module-loader/dist/es6-module-loader.js',
-      'node_modules/traceur/bin/traceur-runtime.js', // Required by PhantomJS2, otherwise it shouts ReferenceError: Can't find variable: require
+      
       'node_modules/systemjs/dist/system.src.js',
-      'node_modules/reflect-metadata/Reflect.js',
-
-      { pattern: 'node_modules/angular2/**/*.js', included: false, watched: false },
       { pattern: 'node_modules/@reactivex/rxjs/dist/**/*.js', included: false, watched: false },
-      { pattern: 'test/**/*.js', included: false, watched: true },
+      'node_modules/reflect-metadata/Reflect.js',
       { pattern: 'node_modules/systemjs/dist/system-polyfills.js', included: false, watched: false }, // PhantomJS2 (and possibly others) might require it
-
+      { pattern: 'node_modules/angular2/**/*.js', included: false, watched: false },
+            
+      { pattern: 'test/**/*.js', included: false, watched: true },      
+      'tools/build/file2modulename.js',
       'test-main.js'
     ],
 
