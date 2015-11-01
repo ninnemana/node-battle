@@ -114,7 +114,7 @@ gulp.task('js.client.watch', () =>
   gulp.watch(PATH.src.ts, (evt) => {
     const filesToCompile = PATH.src.ts;
     compileTs(filesToCompile);
-    notifyLiveReload([evt.path])
+    notifyLiveReload([evt.path]);
   })
 );
 
@@ -170,8 +170,11 @@ gulp.task('tslint', () => {
 
   const src = [
     `${PATH.src.base}/**/*.ts`,
+    `${PATH.cwd}/server/**/*.ts`,
+    `${PATH.tools}/**/*.ts`,    
+    `${PATH.cwd}/gulpfile.ts`,
     `!${PATH.src.base}/**/*.d.ts`,
-    `${PATH.tools}/**/*.ts`,
+    `!${PATH.cwd}/server/**/*.d.ts`,
     `!${PATH.tools}/**/*.d.ts`
   ];
 

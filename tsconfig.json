@@ -13,16 +13,17 @@
         "experimentalAsyncFunctions": false,
         "sourceMap": true
     },
+    "compileOnSave": false,
     "filesGlob": [
         "./client/**/*.ts",
         "./server/**/*.ts",
         "./gulpfile.ts",
         "./tools/**/*.ts",
-        "./tsd_typings/**/*.d.ts"
-    ],
-    "compileOnSave": false,
-    "exclude": [
-        "./node_modules/**",
-        "./tools/typings/tsd/**"
+        "!./tools/typings/tsd/**",
+        "./tools/typings/tsd/tsd.d.ts",
+        "!./dist/**",        
+        "!./test/**",        
+        "!.tmp/**",        
+        "!./node_modules/**"
     ]
 }
