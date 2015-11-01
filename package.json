@@ -68,5 +68,8 @@
     "es6-module-loader": "^0.17.8",
     "es6-shim": "^0.33.9",
     "systemjs": "^0.19.5"
+  },
+  "engines": {
+    "node": "^4.2.1"
   }
 }
