@@ -1,10 +1,12 @@
 <h2>Todos!</h2>
 
 <form [ng-form-model]="todoForm" (submit)="todoForm.valid && createOne()" novalidate class="form-inline">
-  <div class="form-group has-feedback" [class.has-error]="todoForm.controls.title.dirty && todoForm.controls.title.errors">
-    <input ng-control="title" class="form-control" placeholder="Title..." autofocus>
-    <span *ng-if="todoForm.controls.title.dirty && todoForm.controls.title.errors"
-          class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+  <div [class.has-error]="todoForm.controls.title.value !== '' && todoForm.controls.title.dirty
+    && todoForm.controls.title.errors" class="form-group has-feedback">
+    <input ng-control="title" autofocus class="form-control" placeholder="Title...">
+    <span *ng-if="todoForm.controls.title.value !== '' && todoForm.controls.title.dirty
+      && todoForm.controls.title.errors" class="glyphicon glyphicon-remove form-control-feedback"
+      aria-hidden="true"></span>
   </div>
   <button [disabled]="todoForm.errors" type="submit" class="btn btn-primary">
     <span class="glyphicon glyphicon-ok">Add</span>
