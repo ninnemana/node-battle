@@ -6,11 +6,9 @@ import {
 
 import {HomeCmp} from '../home/home';
 import {TodoCmp} from '../todo/todo';
-import {TodoService} from '../../services/todo_service';
 
 @Component({
   selector: 'app',
-  viewProviders: [TodoService],
   templateUrl: './components/app/app.html',
   styleUrls: ['./components/app/app.css'],
   encapsulation: ViewEncapsulation.None,

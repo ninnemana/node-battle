@@ -10,7 +10,7 @@ export function main() {
     });
 
     it('should return the list of todos', () => {
-      const todos = todoService.find();
+      const todos = todoService.search();
       expect(todos).toEqual(jasmine.any(Array));
     });
   });

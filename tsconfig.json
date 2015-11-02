@@ -17,6 +17,7 @@
     "filesGlob": [
         "./client/**/*.ts",
         "./server/**/*.ts",
+        "./shared/**/*.ts",
         "./gulpfile.ts",
         "./tools/**/*.ts",
         "!./tools/typings/tsd/**",

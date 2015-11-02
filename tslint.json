@@ -2,7 +2,7 @@
 	"rules": {
 		"class-name": true,
 		"curly": true,
-		"forin": true,
+		"forin": false,
 		"eofline": true,
 		"indent": "spaces",
 		"max-line-length": [true, 140],
@@ -13,7 +13,7 @@
 			"static-before-instance",
 			"variables-before-functions"
 		],
-		"no-any": true,
+		"no-any": false,
 		"no-arg": true,
 		"no-bitwise": true,
 		"no-conditional-assignment": true,
@@ -21,7 +21,7 @@
 		"no-duplicate-key": true,
 		"no-duplicate-variable": true,		
 		"no-shadowed-variable": true,
-		"no-empty": true,
+		"no-empty": false,
 		"no-eval": true,
 		"no-inferrable-types": true,
 		"no-internal-module": true,
@@ -42,7 +42,7 @@
 			"check-whitespace"
 		],
 		"quotemar ": [ true, "single"],
-		"radix": true,
+		"radix": false,
 		"semicolon": true,
 		"switch-default": true,
 		"triple-equals": [true, "allow-null-check"],

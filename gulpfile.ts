@@ -171,10 +171,12 @@ gulp.task('tslint', () => {
   const src = [
     `${PATH.src.base}/**/*.ts`,
     `${PATH.cwd}/server/**/*.ts`,
+    `${PATH.cwd}/shared/**/*.ts`,
     `${PATH.tools}/**/*.ts`,    
     `${PATH.cwd}/gulpfile.ts`,
     `!${PATH.src.base}/**/*.d.ts`,
     `!${PATH.cwd}/server/**/*.d.ts`,
+    `!${PATH.cwd}/shared/**/*.d.ts`,
     `!${PATH.tools}/**/*.d.ts`
   ];
 

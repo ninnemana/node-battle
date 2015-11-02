@@ -1,8 +1,8 @@
 <h2>Todos!</h2>
 
-<form [ng-form-model]="todoForm" (submit)="todoForm.valid && addOne(todoForm.value)" novalidate class="form-inline">
+<form [ng-form-model]="todoForm" (submit)="todoForm.valid && createOne()" novalidate class="form-inline">
   <div class="form-group has-feedback" [class.has-error]="todoForm.controls.title.dirty && todoForm.controls.title.errors">
-    <input ng-control="title" class="form-control" placeholder="Todo...">
+    <input ng-control="title" class="form-control" placeholder="Title..." autofocus>
     <span *ng-if="todoForm.controls.title.dirty && todoForm.controls.title.errors"
           class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
   </div>
@@ -21,7 +21,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ng-for="#todo of find() | customOrderBy: ['status', '-id']">
+    <tr *ng-for="#todo of todos | customOrderBy: ['status', '-id']">
       <td>{{ todo.title }}</td>
       <td>{{ todo.status }}</td>
       <td>{{ todo.createdAt | date}}</td>

@@ -43,6 +43,10 @@ export class CustomOrderByPipe implements PipeTransform {
   transform(value: Object[], args: string[]) {
     
     const params = Array.isArray(args[0]) ? args[0] : args; 
+    
+    if (!value) {
+      return value;
+    }
 
     value.sort(this.dynamicSortMultiple.apply(this, params));
 
