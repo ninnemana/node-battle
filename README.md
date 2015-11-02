@@ -7,14 +7,15 @@
 * Core Directives
 * Custom Directives
 * Forms
+* HTTP service
 
 > Development utilities:
 * TypeScript (almost) everywhere
+* Backend integration (rest API)
 * Live-reload when the source-code changes
 * Karma setup
 * Sample tests
 * Static analysis linter for TypeScript
-* Very basic express setup (for backend)
 
 ## Goal
 Maintain an up-to-date and minimalist project using the very latest version of Angular2, while exposing most of the Angular2's features. Thus anyone can use it as an extremely minimal base to get up and running with Angular2 and TypeScript (using Gulp for assisting with boilerplate).
