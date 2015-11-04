@@ -40,5 +40,3 @@ Maintain an up-to-date and minimalist project using the very latest version of A
 The following projects have served a lot as inspiration and help:
 - [angular2-seed](https://github.com/mgechev/angular2-seed)
 - [ng2-play](https://github.com/pkozlowski-opensource/ng2-play)
-- [angular2-webpack-starter](https://github.com/angular-class/angular2-webpack-starter)
-- [angular2-authentication-sample](https://github.com/auth0/angular2-authentication-sample)
