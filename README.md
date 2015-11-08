@@ -28,7 +28,7 @@ Maintain an up-to-date and minimalist project using the very latest version of A
 # 2. Run command: npm install
 # 3. Run command: npm start
 ```
-**Tested on:** Node.js 4.2.1
+**Tested on:** Node.js 4.2.x
 
 ##### Use a TypeScript-aware editor to view/edit the code.
 * [Visual Studio Code](https://code.visualstudio.com/)
