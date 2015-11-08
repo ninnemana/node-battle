@@ -1,8 +1,9 @@
-import {Component, Validators, CORE_DIRECTIVES,
+import {Component, Validators, CORE_DIRECTIVES, ViewEncapsulation,
 FORM_DIRECTIVES, ControlGroup, Control} from 'angular2/angular2';
+import * as Rx from '@reactivex/rxjs/dist/cjs/Rx';
 
 import {TodoService} from './todo_service';
-import {Todo} from '../../../shared/dto';
+import {Todo} from '../core/dto';
 import {Autofocus} from '../../directives/Autofocus';
 import {CustomOrderByPipe} from '../../pipes/CustomOrderByPipe';
 
@@ -15,32 +16,70 @@ import {CustomOrderByPipe} from '../../pipes/CustomOrderByPipe';
 })
 export class TodoCmp {
 
-  todoForm: ControlGroup;
-  todos: Todo[];
+  private form: ControlGroup;
+  private todos: Todo[];
 
   constructor(private todoService: TodoService) {
 
-    this.todoForm = new ControlGroup({
-      title: new Control('', Validators.required)
+    this.form = new ControlGroup({
+      id: new Control(null),
+      title: new Control(null, Validators.required)
     });
 
-    this.search();
+    this.find();
   }
 
-  createOne() {
-    const todo: Todo = this.todoForm.value;
-    this.todoService.createOne(todo).subscribe((res: any) => {
-      (<Control>this.todoForm.controls['title']).updateValue('');
-      this.search();
-    });    
+  saveOne(data: Todo): Rx.Observable<Todo> {
+    
+    let obs: Rx.Observable<Todo>;
+    
+    if (data.id) {
+      obs = this.todoService.updateOne(data);
+    } else {
+      obs = this.todoService.createOne(data);  
+    }
+    
+    obs.subscribe((res: Todo) => {
+      this.resetForm();
+      this.find();
+    });
+    
+    return obs;
   }
 
-  removeOne(todo: Todo) {
-    this.todoService.removeOne(todo.id).subscribe(() => this.search());
+  removeOne(event: Event, data: Todo): Rx.Observable<Todo> {
+    
+    event.stopPropagation();
+        
+    const obs = this.todoService.removeOneById(data.id);
+    
+    obs.subscribe((res: Todo) => {
+      this.resetForm();
+      this.find();
+    });
+    
+    return obs;    
   }
 
-  search() {
-    this.todoService.search()
-      .subscribe((res: any) => this.todos = res.todos);
+  selectOne(data: Todo): Rx.Observable<Todo> {
+    const obs = this.todoService.findOneById(data.id);
+    obs.subscribe((res: Todo) => {
+      this.resetForm(res);
+    });
+    return obs;
+  }
+
+  find(): Rx.Observable<Todo[]> {
+    const obs = this.todoService.find();
+    obs.subscribe((res: Todo[]) => {
+      this.todos = res;
+    });
+    return obs;
+  }
+
+  resetForm(data: Todo = {}): void {
+    for (let prop in this.form.controls) {
+      (<Control> this.form.controls[prop]).updateValue(data[prop]);
+    }
   }
 }
