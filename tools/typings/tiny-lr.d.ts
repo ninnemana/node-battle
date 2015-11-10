@@ -1,11 +1,10 @@
 declare module 'tiny-lr' {
-  function tinylr(): TinyLr;
+  function tinylr(): ITinylr;
   module tinylr {}
   export = tinylr;
 
-  interface TinyLr {
+  interface ITinylr {
     changed(options: any): void;
     listen(port: number): void;
-    refresh(files?: string[]): void;
   }
 }

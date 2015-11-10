@@ -1,11 +1,12 @@
 // Use this minimalistic definition file as bluebird dependency
 // generate a lot of errors.
 
-// Very bad one but fix compiler complaints.
-declare module karma {
-  var Server: any;
-}
-
-declare module "karma" {
+declare module 'karma' {
+  var karma: IKarma;
   export = karma;
+  interface IKarma {
+    server: {
+      start(options: any, callback: Function): void
+    };
+  }
 }
