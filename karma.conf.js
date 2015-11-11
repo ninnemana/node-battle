@@ -1,101 +1,94 @@
 // Karma configuration
-// Generated on Wed Jul 15 2015 09:44:02 GMT+0200 (Romance Daylight Time)
+// http://karma-runner.github.io/0.10/config/configuration-file.html
 
 module.exports = function(config) {
   config.set({
+    // base path, that will be used to resolve files and exclude
+    basePath: '',
 
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: './',
-
-
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
-
 
     // list of files / patterns to load in the browser
     files: [
-      'node_modules/zone.js/dist/zone-microtask.js',
-      'node_modules/zone.js/dist/long-stack-trace-zone.js',
-      'node_modules/zone.js/dist/jasmine-patch.js',
-      'node_modules/es6-module-loader/dist/es6-module-loader.js',
-      'node_modules/traceur/bin/traceur-runtime.js', // Required by PhantomJS2, otherwise it shouts ReferenceError: Can't find variable: require
-      'node_modules/traceur/bin/traceur.js',
-      'node_modules/systemjs/dist/system.src.js',
-      'node_modules/reflect-metadata/Reflect.js',
-
-      { pattern: 'node_modules/angular2/**/*.js', included: false, watched: false },
-      { pattern: 'node_modules/@reactivex/rxjs/dist/**/*.js', included: false, watched: false },
-      { pattern: 'test/**/*.js', included: false, watched: true },
-      { pattern: 'node_modules/systemjs/dist/system-polyfills.js', included: false, watched: false }, // PhantomJS2 (and possibly others) might require it
-
-      'test-main.js'
+      'client/bower_components/jquery/dist/jquery.js',
+      'client/bower_components/angular/angular.js',
+      'client/bower_components/angular-mocks/angular-mocks.js',
+      'client/bower_components/angular-resource/angular-resource.js',
+      'client/bower_components/angular-cookies/angular-cookies.js',
+      'client/bower_components/angular-sanitize/angular-sanitize.js',
+      'client/bower_components/angular-route/angular-route.js',
+      'client/bower_components/lodash/dist/lodash.compat.js',
+      'client/bower_components/angular-ui-router/release/angular-ui-router.js',
+      'client/app/app.js',
+      'client/app/app.coffee',
+      'client/app/**/*.js',
+      'client/app/**/*.coffee',
+      'client/components/**/*.js',
+      'client/components/**/*.coffee',
+      'client/app/**/*.jade',
+      'client/components/**/*.jade',
+      'client/app/**/*.html',
+      'client/components/**/*.html'
     ],
 
-
-    // list of files to exclude
-    exclude: [
-      'node_modules/angular2/**/*_spec.js'
-    ],
-
-
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      '**/*.jade': 'ng-jade2js',
+      '**/*.html': 'html2js',
+      'client/app/**/*.js': 'babel',
+      '**/*.coffee': 'coffee',
     },
 
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'client/'
+    },
 
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha'],
+    ngJade2JsPreprocessor: {
+      stripPrefix: 'client/'
+    },
 
+    
+    babelPreprocessor: {
+      options: {
+        sourceMap: 'inline'
+      },
+      filename: function (file) {
+        return file.originalPath.replace(/\.js$/, '.es5.js');
+      },
+      sourceFileName: function (file) {
+        return file.originalPath;
+      }
+    },
+    
+
+    // list of files / patterns to exclude
+    exclude: [],
 
     // web server port
-    port: 9876,
-
-
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
-
+    port: 8080,
 
     // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
     logLevel: config.LOG_INFO,
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    autoWatch: false,
 
 
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: [
-      'PhantomJS2',
-      'Chrome'
-    ],
-
-
-    customLaunchers: {
-      Chrome_travis_ci: {
-        base: 'Chrome',
-        flags: ['--no-sandbox']
-      }
-    },
+    // Start these browsers, currently available:
+    // - Chrome
+    // - ChromeCanary
+    // - Firefox
+    // - Opera
+    // - Safari (only Mac)
+    // - PhantomJS
+    // - IE (only Windows)
+    browsers: ['PhantomJS'],
 
 
     // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
+    // if true, it capture browsers, run tests and exit
     singleRun: false
   });
-
-  if (process.env.APPVEYOR) {
-    config.browsers = ['IE'];
-    config.singleRun = true;
-  }
-
-  if (process.env.TRAVIS || process.env.CIRCLECI) {
-    config.browsers = ['Chrome_travis_ci'];
-    config.singleRun = true;
-  }
 };

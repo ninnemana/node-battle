@@ -1,0 +1,17 @@
+<div class="container">
+    <form ng-submit="battle()">
+        <fieldset class="form-group">
+            <label for="endpoint1">First Endpoint</label>
+            <input type="text" ng-model="endpoint1" class="form-control" id="endpoint1" placeholder="First Endpoint">
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="endpoint2">Second Endpoint</label>
+            <input type="text" ng-model="endpoint2" class="form-control" id="endpoint2" placeholder="Second Endpoint">
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Battle</button>
+    </form>
+
+    <div ng-if="response1">{{ response1 | json }}</div>
+    <div ng-if="response2">{{ response2 | json }}</div>
+</div>
