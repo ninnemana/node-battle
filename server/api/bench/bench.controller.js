@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var benchrest = require('bench-rest');
+var loadtest = require('loadtest');
 var url = require('url');
 
 // Get list of benchs
@@ -14,7 +14,7 @@ exports.index = function (req, res) {
 
         var params = {};
         var limit = 10;
-        var iterations = 100;
+        var iterations = 20;
         for (var i = 0; i < benchOptions.params.length; i++) {
             var p = benchOptions.params[i];
             if (p.key === 'limit'){
@@ -33,36 +33,31 @@ exports.index = function (req, res) {
 			pathname: benchOptions.path,
 			query: params
 		});
-		var flow = {
-			main: [{
-				method: benchOptions.method,
-				uri: endpoint
-			}]
+
+		var results = [];
+		var options = {
+			url: endpoint,
+			maxSeconds: 15,
+			// concurrency: limit,
+			// maxRequests: iterations,
+			method: benchOptions.method,
+			statusCallback: function(result){
+				results = result;
+			}
 		};
 
 		if (benchOptions.method === 'POST' && benchOptions.body) {
-			flow.main.json = benchOptions.body;
+			options.body = benchOptions.body;
 		}
 
-		var runOptions = {
-			limit: limit, // concurrent connections
-			iterations: iterations // number of iterations to perform
-		};
-
-		var errors = [];
-        console.log(flow, runOptions);
-		benchrest(flow, runOptions).on('error', function (err) {
-			errors.push(err);
-		}).on('progress', function (stats, percent) {
-			console.log('Percent completed: %s', percent);
-		}).on('end', function (stats, errorCount) {
-			res.status(200).json({
-				stats: stats,
-				errCount: errorCount
-			});
+		loadtest.loadTest(options, function(err) {
+			if (err) {
+				res.status(500).send(err);
+			}else{
+				res.status(200).send(results);
+			}
 		});
 	} catch (err) {
-        console.log(err);
 		res.status(500).json(err);
 	}
 };
